@@ -1,4 +1,6 @@
 [![Docker Image CI](https://github.com/0b10000/openttd-jgr-patch/actions/workflows/dockerimage.yml/badge.svg)](https://github.com/0b10000/openttd-jgr-patch/actions/workflows/dockerimage.yml)
+
+A modified version of bateau84's OpenTTD Docker images to run with [JGRennison's OpenTTD patches.](https://github.com/JGRennison/OpenTTD-patches)
 ## Usage ##
 
 ### File locations ###
@@ -30,29 +32,29 @@ If your openttd config is set up to listen on port 3979 you need to map the cont
 
 Run Openttd and expose the default ports.  
 
-    docker run -d -p 3979:3979/tcp -p 3979:3979/udp bateau/openttd:latest
+    docker run -d -p 3979:3979/tcp -p 3979:3979/udp ghcr.io/0b10000/openttd-jgr-patch:latest
 
 Run Openttd with random port assignment.  
 
-    docker run -d -P bateau/openttd:latest
+    docker run -d -P ghcr.io/0b10000/openttd-jgr-patch:latest
 
 Its set up to not load any games by default (new game) and it can be run without mounting a .openttd folder.  
 However, if you want to save/load your games, mounting a .openttd folder is required.
 
-    docker run -v /path/to/your/.openttd:/home/openttd/.openttd -p 3979:3979/tcp -p 3979:3979/udp bateau/openttd:latest
+    docker run -v /path/to/your/.openttd:/home/openttd/.openttd -p 3979:3979/tcp -p 3979:3979/udp ghcr.io/0b10000/openttd-jgr-patch:latest
 
 Set UID and GID of user in container to be the same as your user outside with seting env PUID and PGID.
 For example
 
-    docker run -e PUID=1000 -e PGID=1000 -v /path/to/your/.openttd:/home/openttd/.openttd -p 3979:3979/tcp -p 3979:3979/udp bateau/openttd:latest
+    docker run -e PUID=1000 -e PGID=1000 -v /path/to/your/.openttd:/home/openttd/.openttd -p 3979:3979/tcp -p 3979:3979/udp ghcr.io/0b10000/openttd-jgr-patch:latest
 
 For other save games use (/home/openttd/.openttd/save/ is appended to savename when passed to openttd command)
 
-    docker run -e "loadgame=true" -e "savename=game.sav" -v /path/to/your/.openttd:/home/openttd/.openttd -p 3979:3979/tcp -p 3979:3979/udp bateau/openttd:latest
+    docker run -e "loadgame=true" -e "savename=game.sav" -v /path/to/your/.openttd:/home/openttd/.openttd -p 3979:3979/tcp -p 3979:3979/udp ghcr.io/0b10000/openttd-jgr-patch:latest
 
 For example to run server and load my savename game.sav:
 
-    docker run -d -p 3979:3979/tcp -p 3979:3979/udp -v /home/<your_username>/.openttd:/home/openttd/.openttd -e PUID=<your_userid> -e PGID=<your_groupid> -e "loadgame=true" -e "savename=game.sav" bateau/openttd:latest
+    docker run -d -p 3979:3979/tcp -p 3979:3979/udp -v /home/<your_username>/.openttd:/home/openttd/.openttd -e PUID=<your_userid> -e PGID=<your_groupid> -e "loadgame=true" -e "savename=game.sav" ghcr.io/0b10000/openttd-jgr-patch:latest
 
 ## Kubernetes ##
 
@@ -63,5 +65,3 @@ just run
 
 and it will apply configmap with openttd.cfg, deployment and service listening on port 31979 UDP/TCP.
 
-## Other tags ##
-   * See [bateau/openttd](https://hub.docker.com/r/bateau/openttd) on docker hub for other tags
