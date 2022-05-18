@@ -82,7 +82,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         id: trivy
         with:
-          image-ref: '${{ env.DOCKER_REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ matrix.version }}'
+          image-ref: '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}'
           format: 'json'
           exit-code: '0'
           ignore-unfixed: true
