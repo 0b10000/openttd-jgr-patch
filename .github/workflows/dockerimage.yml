@@ -66,8 +66,8 @@ jobs:
           pull: true
           build-args: OPENTTD_VERSION=${{ matrix.version }}
           tags: |
-            ${{ env.DOCKER_REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-            ${{ env.DOCKER_REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ matrix.version }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}
       - name: Build and push ${{ matrix.version }}
         if: needs.get_versions.outputs.latest != matrix.version
         uses: docker/build-push-action@v2
@@ -76,7 +76,7 @@ jobs:
           push: true
           pull: true
           build-args: OPENTTD_VERSION=${{ matrix.version }}
-          tags: ${{ env.DOCKER_REPO_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ matrix.version }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version }}
       # Trivy test
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
