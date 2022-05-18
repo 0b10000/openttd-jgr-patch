@@ -9,11 +9,10 @@ on:
   pull_request:
     branches: [master]
   workflow_dispatch:
-    branches: [master]
 
 env:
-  DOCKER_REPO_NAME: bateau
-  DOCKER_IMAGE_NAME: openttd
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   # Get list of versions
@@ -24,8 +23,8 @@ jobs:
         id: get_versions
         # yamllint disable-line rule:line-length
         run: |
-          echo "::set-output name=versions::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/OpenTTD/OpenTTD/releases | jq -cMr '[.[:10]|.[]|.tag_name]')"
-          echo "::set-output name=latest::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/OpenTTD/OpenTTD/releases | jq -cMr '([.[]|select(all(.tag_name; contains("beta")|not))])|.[:1]|.[].tag_name')"
+          echo "::set-output name=versions::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/JGRennison/OpenTTD-patches/releases | jq -cMr '[.[:10]|.[]|.tag_name]')"
+          echo "::set-output name=latest::$(curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/JGRennison/OpenTTD-patches/releases | jq -cMr '([.[]|select(all(.tag_name; contains("beta")|not))])|.[:1]|.[].tag_name')"
       - name: Output version string
         run: |
           echo ${{ steps.get_versions.outputs.versions }}
@@ -44,11 +43,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Docker registry authentication
-        uses: docker/login-action@v1
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Qemu
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -61,6 +61,7 @@ jobs:
         if: needs.get_versions.outputs.latest == matrix.version
         uses: docker/build-push-action@v2
         with:
+          context: .
           push: true
           pull: true
           build-args: OPENTTD_VERSION=${{ matrix.version }}
@@ -71,6 +72,7 @@ jobs:
         if: needs.get_versions.outputs.latest != matrix.version
         uses: docker/build-push-action@v2
         with:
+          context: .
           push: true
           pull: true
           build-args: OPENTTD_VERSION=${{ matrix.version }}
