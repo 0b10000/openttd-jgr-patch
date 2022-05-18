@@ -1,5 +1,4 @@
-![Docker Image CI](https://github.com/bateau84/openttd/workflows/Docker%20Image%20CI/badge.svg?branch=master)  
-[![dockeri.co](https://dockeri.co/image/bateau/openttd)](https://hub.docker.com/r/bateau/openttd)
+[![Docker Image CI](https://github.com/0b10000/openttd-jgr-patch/actions/workflows/dockerimage.yml/badge.svg)](https://github.com/0b10000/openttd-jgr-patch/actions/workflows/dockerimage.yml)
 ## Usage ##
 
 ### File locations ###
