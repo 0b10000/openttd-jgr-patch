@@ -33,7 +33,7 @@ spec:
                   name: openttd-user-config
                   key: UID
       containers:
-        - image: bateau/openttd:latest
+        - image: ghcr.io/0b10000/openttd-jgr-patch:latest
           imagePullPolicy: Always
           name: openttd
           securityContext:
